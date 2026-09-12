@@ -2,7 +2,7 @@ name: Generate and Deploy RSS Feed
 
 on:
   schedule:
-    # 매일 한국 시간 오전 8시 (UTC 23:00) 실행
+    # 매일 한국 시간 오전 08:00 (UTC 23:00) 실행
     - cron: '0 23 * * *'
   push:
     paths:
@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write    # 파일 커밋 및 푸시 권한
+  contents: write
   pages: write
   id-token: write
 
@@ -30,21 +30,20 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install google-genai
+        run: pip install -r requirements.txt
 
-      - name: Run Fetch and Summarize
+      - name: Sync from Google Drive
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python fetch_and_summarize.py
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+        run: python sync_drive.py
 
-      - name: Commit new posts
+      - name: Commit and Push new posts
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add content/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: automated daily summary" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: sync posts from Google Drive" && git push)
 
       - name: Build RSS feed
         run: python build_rss.py
