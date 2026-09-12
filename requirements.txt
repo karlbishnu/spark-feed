@@ -1,5 +1,6 @@
-feedgen>=1.0.0
-python-frontmatter>=1.1.0
-markdown>=3.6
-google-api-python-client>=2.100.0
-google-auth>=2.23.0
+google-genai
+google-api-python-client
+google-auth
+python-frontmatter
+feedgen
+markdown
