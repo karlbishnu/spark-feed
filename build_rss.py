@@ -189,5 +189,49 @@ def main():
     
     print("Successfully built RSS feeds with enhanced Feedly styling.")
 
+    # 루트 접속 시 404 방지용 index.html 자동 생성
+    index_html = f"""<!DOCTYPE html>
+        <html lang="ko">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Spark Feed Directory</title>
+        <style>
+            body {{ font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; line-height: 1.6; color: #1e293b; background: #f8fafc; }}
+            h1 {{ font-size: 1.5rem; margin-bottom: 8px; }}
+            p.desc {{ color: #64748b; font-size: 0.95rem; margin-top: 0; }}
+            ul {{ list-style: none; padding: 0; margin-top: 24px; }}
+            li {{ background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }}
+            a.feed-link {{ font-weight: 600; text-decoration: none; color: #2563eb; }}
+            a.feedly-btn {{ font-size: 0.85rem; background: #22c55e; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-weight: 500; }}
+        </style>
+        </head>
+        <body>
+        <h1>📡 Spark Feed</h1>
+        <p class="desc">자동 리서치 큐레이션 RSS 피드 목록</p>
+        <ul>
+            <li>
+            <a class="feed-link" href="{SITE_URL}/all.xml">전체 통합 피드 (all.xml)</a>
+            <a class="feedly-btn" href="https://feedly.com/i/subscription/feed/{SITE_URL}/all.xml" target="_blank">+ Feedly</a>
+            </li>
+            <li>
+            <a class="feed-link" href="{SITE_URL}/astrophysics.xml">🔭 천체물리 (astrophysics.xml)</a>
+            <a class="feedly-btn" href="https://feedly.com/i/subscription/feed/{SITE_URL}/astrophysics.xml" target="_blank">+ Feedly</a>
+            </li>
+            <li>
+            <a class="feed-link" href="{SITE_URL}/macro.xml">📈 거시경제 (macro.xml)</a>
+            <a class="feedly-btn" href="https://feedly.com/i/subscription/feed/{SITE_URL}/macro.xml" target="_blank">+ Feedly</a>
+            </li>
+            <li>
+            <a class="feed-link" href="{SITE_URL}/ai.xml">🤖 AI·기술 (ai.xml)</a>
+            <a class="feedly-btn" href="https://feedly.com/i/subscription/feed/{SITE_URL}/ai.xml" target="_blank">+ Feedly</a>
+            </li>
+        </ul>
+        </body>
+        </html>"""
+
+    with open("public/index.html", "w", encoding="utf-8") as f:
+        f.write(index_html)
+
 if __name__ == "__main__":
     main()
