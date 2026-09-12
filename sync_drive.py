@@ -27,6 +27,10 @@ for file in files:
     file_id = file["id"]
     name = file["name"]
     mime_type = file["mimeType"]
+
+    # 설정 파일(_로 시작)은 피드 발행 대상에서 제외
+    if name.startswith("_"):
+        continue
     
     # Google Docs 형식인 경우 텍스트로 내보내기, 일반 파일은 직접 다운로드
     if mime_type == "application/vnd.google-apps.document":
