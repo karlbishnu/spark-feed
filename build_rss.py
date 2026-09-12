@@ -101,7 +101,8 @@ def parse_post(file_path: str):
                     meta[k] = m.group(1).strip()
 
     # 3. 제목(Title) 확정 (빈칸 절대 방지)
-    title = meta.get("title", "").strip().strip('"').strip("'")
+    title_value = meta.get("title", "")
+    title = str(title_value).strip().strip('"').strip("'") if title_value else ""
     if not title:
         # 본문의 첫 번째 Markdown 헤더(# 제목) 탐색
         h1_match = re.search(r'^#+\s+(.+)$', content, re.MULTILINE)
@@ -117,15 +118,21 @@ def parse_post(file_path: str):
     content = clean_latex_to_unicode(content)
 
     # 4. 링크 및 날짜 확정
-    link = meta.get("link", "").strip().strip('"').strip("'")
+    link_value = meta.get("link", "")
+    link = str(link_value).strip().strip('"').strip("'") if link_value else ""
     if not link or "http" not in link:
         link = f"{SITE_URL}#{os.path.splitext(os.path.basename(file_path))[0]}"
 
-    date_str = meta.get("date", "").strip().strip('"').strip("'")
-    try:
-        post_date = datetime.fromisoformat(date_str) if date_str else datetime.now(timezone.utc)
-    except Exception:
-        post_date = datetime.now(timezone.utc)
+    date_value = meta.get("date", "")
+    # Handle both datetime objects and strings
+    if isinstance(date_value, datetime):
+        post_date = date_value
+    else:
+        date_str = str(date_value).strip().strip('"').strip("'")
+        try:
+            post_date = datetime.fromisoformat(date_str) if date_str else datetime.now(timezone.utc)
+        except Exception:
+            post_date = datetime.now(timezone.utc)
 
     return {
         "title": title,
