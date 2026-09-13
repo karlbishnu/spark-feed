@@ -2,8 +2,8 @@ name: Generate and Deploy RSS Feed
 
 on:
   schedule:
-    # 매일 한국 시간 오전 08:00 (UTC 23:00) 실행
-    - cron: '0 23 * * *'
+    # 매일 한국 시간 오전 06:30 (UTC 21:30) 실행
+    - cron: '30 21 * * *'
   push:
     paths:
       - 'content/**'
